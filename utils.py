@@ -1,5 +1,4 @@
 import json
-import re
 
 
 def scrape_live_passport_data():
@@ -113,7 +112,6 @@ def get_documents(db, age, profession, name_change=False):
 
     return list(dict.fromkeys(docs))
 
-
 def build_bangla_summary(age, profession, policy_result, fee, delivery, pages, documents):
     validity = policy_result["validity"]
     required_id = policy_result["required_id"]
@@ -170,7 +168,6 @@ def build_bangla_summary(age, profession, policy_result, fee, delivery, pages, d
 
     return "\n".join(lines)
 
-
 def build_final_report(age, policy_result, is_valid, validation_msg, fee, delivery, documents):
     """
     Builds the definitive, guaranteed-accurate Markdown report directly in
@@ -203,43 +200,3 @@ def build_final_report(age, policy_result, is_valid, validation_msg, fee, delive
         lines.append(f"*Note: {policy_result['warning']}*")
 
     return "\n".join(lines)
-
-
-def parse_freeform_input(sentence):
-    """
-    Extracts age, profession, pages, and delivery urgency from a
-    freeform natural-language sentence, matching the assignment's
-    Example Input Scenario format.
-    """
-    sentence_lower = sentence.lower()
-
-    age_match = re.search(r"(\d{1,3})\s*-?\s*year[-\s]?old", sentence_lower)
-    age = int(age_match.group(1)) if age_match else None
-
-    pages = 64 if "64" in sentence_lower else 48
-
-    if "express" in sentence_lower or "urgent" in sentence_lower or "two weeks" in sentence_lower:
-        delivery = "express"
-    elif "super express" in sentence_lower:
-        delivery = "super_express"
-    else:
-        delivery = "regular"
-
-    if "government" in sentence_lower or "govt" in sentence_lower:
-        profession = "government employee"
-    elif "private" in sentence_lower:
-        profession = "private sector employee"
-    elif "student" in sentence_lower:
-        profession = "student"
-    else:
-        profession = "general applicant"
-
-    has_nid = "nid" in sentence_lower
-
-    return {
-        "age": age,
-        "profession": profession,
-        "pages": pages,
-        "delivery": delivery,
-        "has_nid": "yes" if has_nid else "no",
-    }
