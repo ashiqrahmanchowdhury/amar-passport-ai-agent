@@ -28,6 +28,7 @@ Agents run on a **local Ollama model (`llama3.2`)** — no external API key requ
 - ✅ **Bilingual output** — English Markdown table + natural Bangla summary
 - ✅ **Error handling** — flags inconsistent requests (e.g., a 15-year-old requesting a 10-year passport) and auto-corrects
 - ✅ **Fallback logic** — attempts a live portal lookup first, falls back to `local_db.json` when it fails
+- ✅ **Two input modes** — structured Q&A, or describe your situation in one natural-language sentence (e.g. the assignment's example scenario) and the system extracts age, profession, pages, and delivery urgency automatically
 - ✅ Handles minors, adults, seniors (65+), government employees, and name-change cases
 
 ## 📁 Project Structure
@@ -57,7 +58,11 @@ Run:
 python app.py
 ```
 
-You'll be prompted for: age, profession, passport pages (48/64), delivery speed, requested validity, city, NID status, and name-change status.
+You'll first be asked to choose an input mode:
+- **`S`** — structured questions (age, profession, pages, delivery, etc. asked one by one)
+- **`F`** — describe your situation in one sentence (e.g. *"I am a 24-year-old private sector employee..."*) and the system extracts the details automatically
+
+Either way, you'll also be asked for: requested validity, city, and whether you changed your name.
 
 ## 📝 Example
 
