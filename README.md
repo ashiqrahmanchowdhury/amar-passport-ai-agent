@@ -2,7 +2,7 @@
 
 A CrewAI-based **Multi-Agent System (MAS)** that acts as a Virtual Consular Officer for Bangladesh's e-Passport system. Given an applicant's age, profession, and delivery preference, it produces a full **Passport Readiness Report** — in **English and Bangla** — covering eligibility, fees, and required documents.
 
-> Built for **Module 23: Applied AI with Multi-Agent Systems** assignment.
+> Built for **Module 23: Building "Amar Passport" AI Agent** assignment.
 
 ## 🤖 The Crew
 
