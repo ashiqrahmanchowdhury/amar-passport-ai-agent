@@ -1,20 +1,43 @@
 from crewai import Crew
 from agents import policy_guardian, fee_calculator, document_architect, report_writer
 from tasks import build_tasks
-from utils import load_local_db, get_passport_policy, validate_request, calculate_fee, get_documents, build_bangla_summary, build_final_report
+from utils import (
+    load_local_db,
+    get_passport_policy,
+    validate_request,
+    calculate_fee,
+    get_documents,
+    build_bangla_summary,
+    build_final_report,
+    parse_freeform_input,
+)
 
 
 print("===== Amar Passport AI Agent =====")
 
-age = int(input("Enter Age: "))
-profession = input("Enter Profession: ")
-pages = input("Passport Pages (48/64): ")
-delivery = input("Delivery (regular/express/super_express): ")
+mode = input("Type 'S' for structured questions, or 'F' to describe your situation in one sentence: ").strip().upper()
+
+if mode == "F":
+    sentence = input("\nDescribe your situation (e.g. 'I am a 24-year-old private sector employee...'): ")
+    parsed = parse_freeform_input(sentence)
+    print(f"\n📋 Extracted: {parsed}\n")
+
+    age = parsed["age"] if parsed["age"] is not None else int(input("Couldn't detect age, please enter it: "))
+    profession = parsed["profession"]
+    pages = str(parsed["pages"])
+    delivery = parsed["delivery"]
+    has_nid = parsed["has_nid"]
+else:
+    age = int(input("Enter Age: "))
+    profession = input("Enter Profession: ")
+    pages = input("Passport Pages (48/64): ")
+    delivery = input("Delivery (regular/express/super_express): ")
+    has_nid = input("Do you have NID? (yes/no): ")
+
 requested_validity = input("Requested Validity (5 Years/10 Years): ")
 requested_validity = requested_validity.strip().lower()
 requested_validity = "10 Years" if "10" in requested_validity else "5 Years"
 city = input("City: ")
-has_nid = input("Do you have NID? (yes/no): ")
 name_change_input = input("Did you change your name? (yes/no): ")
 name_change = name_change_input.strip().lower() == "yes"
 
@@ -70,8 +93,6 @@ print(" AMAR PASSPORT READINESS REPORT ")
 print("========================================")
 print(result)
 
-# Debug info: shows the exact Python-calculated values used,
-# so you can verify the LLM didn't invent any numbers.
 print("\n---- Internal Computed Values (for debugging) ----")
 
 print("\n========================================")
