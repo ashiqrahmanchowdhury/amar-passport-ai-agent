@@ -200,3 +200,48 @@ def build_final_report(age, policy_result, is_valid, validation_msg, fee, delive
         lines.append(f"*Note: {policy_result['warning']}*")
 
     return "\n".join(lines)
+
+import re
+
+def parse_freeform_input(text):
+    text_lower = text.lower()
+
+    # Age
+    age = None
+    age_match = re.search(r'(\d+)', text_lower)
+    if age_match:
+        age = int(age_match.group(1))
+
+    # Profession
+    profession = "Unknown"
+
+    if "student" in text_lower:
+        profession = "Student"
+    elif "government" in text_lower or "govt" in text_lower:
+        profession = "Government"
+    elif "private" in text_lower:
+        profession = "Private"
+    elif "business" in text_lower:
+        profession = "Business"
+
+    # Passport Pages
+    pages = "64" if "64" in text_lower else "48"
+
+    # Delivery
+    if "super" in text_lower:
+        delivery = "super_express"
+    elif "express" in text_lower:
+        delivery = "express"
+    else:
+        delivery = "regular"
+
+    # NID
+    has_nid = not ("no nid" in text_lower or "without nid" in text_lower)
+
+    return {
+        "age": age,
+        "profession": profession,
+        "pages": pages,
+        "delivery": delivery,
+        "has_nid": has_nid,
+    }
